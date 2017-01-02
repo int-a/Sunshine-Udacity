@@ -7,7 +7,8 @@
 
     <!-- style for item selected on phone -->
     <style name="ForecastListStyle">
-        <item name="android:choiceMode">none</item>
+        <item name="android:choiceMode">singleChoice</item>
     </style>
+
 
 </resources>

@@ -160,7 +160,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             return;
         }
 
-        if(cursor != null && cursor.moveToFirst()) {
+        if(null != cursor && cursor.moveToFirst()) {
             // Read weather condition ID from cursor
             //int weatherId = cursor.getInt(COL_WEATHER_CONDITION_ID);
             int weatherID = Utility.getArtResourceForWeatherCondition(cursor.getInt(COL_WEATHER_CONDITION_ID));
