@@ -78,5 +78,7 @@
 
     <!-- Humidity format CHAR LIMIT=25]-->
     <string name="format_humidity">Humidity: <xliff:g id="humidity">%1.0f</xliff:g> %%</string>
+    <string name="forecast_image_desc">Small image dispaying art that depicts current weather</string>
+    <string name="pref_location_entry_edittext_hint">Enter location zip code</string>
 
 </resources>

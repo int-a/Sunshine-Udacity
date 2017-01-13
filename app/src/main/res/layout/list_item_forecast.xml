@@ -15,6 +15,7 @@
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:layout_gravity="center"
+            android:contentDescription="@string/forecast_image_desc"
             android:id="@+id/list_item_icon"
             />
     </FrameLayout>
