@@ -12,11 +12,16 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed"
+            android:textSize="24sp"
             android:id="@+id/detail_day_textview" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed"
+            android:textSize="16sp"
+            android:textColor="@color/fragment_detail_grey"
             android:id="@+id/detail_date_textview" />
 
         <LinearLayout
@@ -34,11 +39,20 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-light"
+                    android:textSize="96sp"
+                    android:paddingStart="32dp"
+                    android:paddingLeft="32dp"
                     android:id="@+id/detail_high_textview" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-light"
+                    android:textSize="48sp"
+                    android:textColor="@color/fragment_detail_grey"
+                    android:paddingStart="64dp"
+                    android:paddingLeft="64dp"
                     android:id="@+id/detail_low_textview" />
 
             </LinearLayout>
@@ -59,6 +73,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:textSize="22sp"
+                    android:textColor="@color/fragment_detail_grey"
                     android:id="@+id/detail_forecast_textview" />
 
             </LinearLayout>
@@ -68,17 +84,27 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
+            android:textSize="22sp"
+            android:layout_margin="2dp"
             android:id="@+id/detail_humidity_textview" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/detail_wind_textview" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
+            android:textSize="22sp"
+            android:layout_margin="2dp"
             android:id="@+id/detail_pressure_textview" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
+            android:textSize="22sp"
+            android:layout_margin="2dp"
+            android:id="@+id/detail_wind_textview" />
+
     </LinearLayout>
 
 </ScrollView>

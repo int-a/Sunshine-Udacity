@@ -13,18 +13,24 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="16dp">
 
             <!-- Header: Day, Date -->
             <TextView
                 android:id="@+id/detail_day_textview"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed"
+                android:textSize="24sp"/>
 
             <TextView
                 android:id="@+id/detail_date_textview"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed"
+                android:textSize="20sp"
+                android:textColor="@color/fragment_detail_grey"/>
 
         </LinearLayout>
 
@@ -32,34 +38,51 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="16dp">
 
             <TextView
                 android:id="@+id/detail_high_textview"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-light"
+                android:textSize="98sp"/>
 
             <TextView
                 android:id="@+id/detail_low_textview"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="14dp"
+                android:fontFamily="sans-serif-light"
+                android:textSize="48sp"
+                android:textColor="@color/fragment_detail_grey"/>
 
             <!-- Humidity, wind, pressure -->
             <TextView
                 android:id="@+id/detail_humidity_textview"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:fontFamily="sans-serif-condensed"
+                android:textSize="22sp"/>
 
             <TextView
                 android:id="@+id/detail_pressure_textview"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:fontFamily="sans-serif-condensed"
+                android:textSize="22sp"/>
 
             <TextView
                 android:id="@+id/detail_wind_textview"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:fontFamily="sans-serif-condensed"
+                android:textSize="22sp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -71,12 +94,16 @@
             <ImageView
                 android:id="@+id/detail_icon"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:padding="16dp"/>
 
             <TextView
                 android:id="@+id/detail_forecast_textview"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed"
+                android:textSize="22sp"
+                android:textColor="@color/fragment_detail_grey"/>
         </LinearLayout>
     </LinearLayout>
 </ScrollView>
