@@ -33,10 +33,7 @@ import android.view.animation.RotateAnimation;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.Sensor;
-import android.app.Activity;
 
-import static android.R.attr.data;
-import static android.content.Context.SENSOR_SERVICE;
 
 public class DetailFragment extends Fragment implements SensorEventListener, LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -92,12 +89,12 @@ public class DetailFragment extends Fragment implements SensorEventListener, Loa
 
     // Variables for compass
     // Define the display assembly compass picture
-    private ImageView image;
+    private ImageView mCompassView;
     // Record the compass picture angle turned
     private float currentDegree = 0f;
     // Device sensor manager
     private SensorManager mSensorManager;
-    private TextView tvHeading;
+    private TextView mHeadingView;
 
     public DetailFragment() {
         setHasOptionsMenu(true);
@@ -123,13 +120,10 @@ public class DetailFragment extends Fragment implements SensorEventListener, Loa
         mPressureView = (TextView) rootView.findViewById(R.id.detail_pressure_textview);
 
         // Set image to the image of the compass
-        image = (ImageView) rootView.findViewById(R.id.compass_image);
+        mCompassView = (ImageView) rootView.findViewById(R.id.detail_compass_image);
 
         // TextView that will tell the user what degree he is heading
-        tvHeading = (TextView) rootView.findViewById(R.id.tvHeading);
-
-        getActivity().setContentView(R.layout.activity_main);
-
+        mHeadingView = (TextView) rootView.findViewById(R.id.detail_heading_textview);
 
         // Initialize the device sensor
         mSensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
@@ -262,14 +256,8 @@ public class DetailFragment extends Fragment implements SensorEventListener, Loa
 
     @Override
     public void onActivityCreated(Bundle savedInsatnceState) {
-        getLoaderManager().initLoader(DETAIL_LOADER, null, this); // TODO: Why is it doing this? (was put in by code completion)
+        getLoaderManager().initLoader(DETAIL_LOADER, null, this);
         super.onActivityCreated(savedInsatnceState);
-
-        getActivity().setContentView(R.layout.activity_main);
-
-
-        // Initialize the device sensor
-        mSensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
     }
 
     @Override
@@ -296,7 +284,7 @@ public class DetailFragment extends Fragment implements SensorEventListener, Loa
         // get the angle around the z-axis rotated
         float degree = Math.round(event.values[0]);
 
-        tvHeading.setText("Heading: " + Float.toString(degree) + " degrees");
+        mHeadingView.setText("Heading: " + Float.toString(degree) + " degrees");
 
         // Create a rotation animation (revers turn degree degrees)
         RotateAnimation ra = new RotateAnimation(
@@ -314,7 +302,7 @@ public class DetailFragment extends Fragment implements SensorEventListener, Loa
         ra.setFillAfter(true);
 
         // Start the animation
-        image.startAnimation(ra);
+        mCompassView.startAnimation(ra);
         currentDegree = -degree;
     }
 

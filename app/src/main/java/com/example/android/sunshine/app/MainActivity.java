@@ -114,7 +114,24 @@ public class MainActivity extends ActionBarActivity implements ForecastFragment.
         }
     }
 
-
+    @Override
+    public void onResume(){
+        super.onResume();
+        String location = Utility.getPreferredLocation(this);
+        if(!location.equals(mLocation) && location != null) {
+            ForecastFragment ff = (ForecastFragment) getSupportFragmentManager().findFragmentById(
+                    R.id.fragment_forecast);
+            if(ff != null) {
+                ff.onLocationChanged();
+            }
+            DetailFragment df = (DetailFragment) getSupportFragmentManager().findFragmentByTag(
+                DETAILFRAGMENT_TAG);
+            if(df != null) {
+                df.onLocationChanged(location);
+            }
+            mLocation = location;
+        }
+    }
 
     @Override
     public void onItemSelected(Uri contentUri) {
