@@ -1,7 +1,9 @@
 package com.example.android.sunshine.app;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -25,9 +27,18 @@ import com.example.android.sunshine.app.R;
 import com.example.android.sunshine.app.Utility;
 import com.example.android.sunshine.app.data.WeatherContract;
 
-import static android.R.attr.data;
+// compass specific
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.Sensor;
+import android.app.Activity;
 
-public class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+import static android.R.attr.data;
+import static android.content.Context.SENSOR_SERVICE;
+
+public class DetailFragment extends Fragment implements SensorEventListener, LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String LOG_TAG = DetailFragment.class.getSimpleName();
     static final String DETAIL_URI = "URI";
@@ -79,6 +90,15 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     private TextView mWindView;
     private TextView mPressureView;
 
+    // Variables for compass
+    // Define the display assembly compass picture
+    private ImageView image;
+    // Record the compass picture angle turned
+    private float currentDegree = 0f;
+    // Device sensor manager
+    private SensorManager mSensorManager;
+    private TextView tvHeading;
+
     public DetailFragment() {
         setHasOptionsMenu(true);
     }
@@ -101,9 +121,22 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         mHumidityView = (TextView) rootView.findViewById(R.id.detail_humidity_textview);
         mWindView = (TextView) rootView.findViewById(R.id.detail_wind_textview);
         mPressureView = (TextView) rootView.findViewById(R.id.detail_pressure_textview);
-        return rootView;
-    }
 
+        // Set image to the image of the compass
+        image = (ImageView) rootView.findViewById(R.id.compass_image);
+
+        // TextView that will tell the user what degree he is heading
+        tvHeading = (TextView) rootView.findViewById(R.id.tvHeading);
+
+        getActivity().setContentView(R.layout.activity_main);
+
+
+        // Initialize the device sensor
+        mSensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
+
+        return rootView;
+
+    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -229,7 +262,64 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public void onActivityCreated(Bundle savedInsatnceState) {
-        getLoaderManager().initLoader(DETAIL_LOADER, null, this);
+        getLoaderManager().initLoader(DETAIL_LOADER, null, this); // TODO: Why is it doing this? (was put in by code completion)
         super.onActivityCreated(savedInsatnceState);
+
+        getActivity().setContentView(R.layout.activity_main);
+
+
+        // Initialize the device sensor
+        mSensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // For the system's orientation sensor registered listeners
+        // TODO: use SensorManager.getOrientation() instead of depreciated constant
+        mSensorManager.registerListener(this,
+                mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION),
+                SensorManager.SENSOR_DELAY_GAME);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        // To stop the listener and save battery
+        mSensorManager.unregisterListener(this);
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        // get the angle around the z-axis rotated
+        float degree = Math.round(event.values[0]);
+
+        tvHeading.setText("Heading: " + Float.toString(degree) + " degrees");
+
+        // Create a rotation animation (revers turn degree degrees)
+        RotateAnimation ra = new RotateAnimation(
+                currentDegree,
+                -degree,
+                Animation.RELATIVE_TO_SELF,
+                0.5f,
+                Animation.RELATIVE_TO_SELF,
+                0.5f);
+
+        // How long the animation will take place
+        ra.setDuration(210);
+
+        // Set the animation after the end of the reservation status
+        ra.setFillAfter(true);
+
+        // Start the animation
+        image.startAnimation(ra);
+        currentDegree = -degree;
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        // not in use
     }
 }
