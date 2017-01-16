@@ -90,11 +90,14 @@ public class DetailFragment extends Fragment implements SensorEventListener, Loa
     // Variables for compass
     // Define the display assembly compass picture
     private ImageView mCompassView;
+    private ImageView mArrowView;
     // Record the compass picture angle turned
-    private float currentDegree = 0f;
+    private float mCurrentDegree = 0f;
+    private float mSensorDegree = 0f;
     // Device sensor manager
     private SensorManager mSensorManager;
     private TextView mHeadingView;
+    private float mWindHeading;
 
     public DetailFragment() {
         setHasOptionsMenu(true);
@@ -121,6 +124,9 @@ public class DetailFragment extends Fragment implements SensorEventListener, Loa
 
         // Set image to the image of the compass
         mCompassView = (ImageView) rootView.findViewById(R.id.detail_compass_image);
+
+        // Set image to the image of the arrow
+        mArrowView = (ImageView) rootView.findViewById(R.id.detail_wind_arrow_image);
 
         // TextView that will tell the user what degree he is heading
         mHeadingView = (TextView) rootView.findViewById(R.id.detail_heading_textview);
@@ -239,6 +245,10 @@ public class DetailFragment extends Fragment implements SensorEventListener, Loa
             if (mShareActionProvider != null) {
                 mShareActionProvider.setShareIntent(createShareForecastIntent());
             }
+
+            // Set wind heading to instance variable for use in compass arrow
+            mWindHeading = windDirStr;
+
         }
     }
 
@@ -282,14 +292,15 @@ public class DetailFragment extends Fragment implements SensorEventListener, Loa
     @Override
     public void onSensorChanged(SensorEvent event) {
         // get the angle around the z-axis rotated
-        float degree = Math.round(event.values[0]);
+        mSensorDegree = Math.round(event.values[0]);
 
-        mHeadingView.setText("Heading: " + Float.toString(degree) + " degrees");
+        //mHeadingView.setText("Heading: " + Float.toString(degree) + " degrees");
+        mHeadingView.setText(Float.toString(mWindHeading));
 
         // Create a rotation animation (revers turn degree degrees)
         RotateAnimation ra = new RotateAnimation(
-                currentDegree,
-                -degree,
+                mCurrentDegree,
+                -mSensorDegree,
                 Animation.RELATIVE_TO_SELF,
                 0.5f,
                 Animation.RELATIVE_TO_SELF,
@@ -303,11 +314,37 @@ public class DetailFragment extends Fragment implements SensorEventListener, Loa
 
         // Start the animation
         mCompassView.startAnimation(ra);
-        currentDegree = -degree;
+        mCurrentDegree = -mSensorDegree;
+
+        rotateWindArrow(mCurrentDegree + mWindHeading);
     }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         // not in use
+    }
+
+    /*
+        Rotate the wind arrow to the given heading
+     */
+    private void rotateWindArrow(float heading) {
+        // Create a rotation animation (revers turn degree degrees)
+        RotateAnimation ra = new RotateAnimation(
+                heading,
+                -mSensorDegree,
+                Animation.RELATIVE_TO_SELF,
+                0.5f,
+                Animation.RELATIVE_TO_SELF,
+                0.5f);
+
+        // How long the animation will take place
+        ra.setDuration(210);
+
+        // Set the animation after the end of the reservation status
+        ra.setFillAfter(true);
+
+        // Start the animation
+        mArrowView.startAnimation(ra);
+        mCurrentDegree = -mSensorDegree;
     }
 }

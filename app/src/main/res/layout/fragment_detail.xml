@@ -106,12 +106,26 @@
             android:layout_margin="2dp"
             android:id="@+id/detail_wind_textview" />
 
-        <ImageView
-            android:id="@+id/detail_compass_image"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:layout_marginTop="16dp"
-            android:src="@drawable/img_compass" />
+        <RelativeLayout
+            android:id="@+id/detail_compass_and_wind_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/detail_compass_image"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_marginTop="16dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/img_compass" />
+
+            <ImageView
+                android:id="@+id/detail_wind_arrow_image"
+                android:layout_width="175dp"
+                android:layout_height="175dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/img_arrow"/>
+        </RelativeLayout>
 
         <TextView
             android:layout_width="wrap_content"
