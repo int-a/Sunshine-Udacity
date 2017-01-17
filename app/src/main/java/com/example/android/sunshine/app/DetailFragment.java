@@ -1,7 +1,9 @@
 package com.example.android.sunshine.app;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -25,9 +27,15 @@ import com.example.android.sunshine.app.R;
 import com.example.android.sunshine.app.Utility;
 import com.example.android.sunshine.app.data.WeatherContract;
 
-import static android.R.attr.data;
+// compass specific
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.Sensor;
 
-public class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+
+public class DetailFragment extends Fragment implements SensorEventListener, LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String LOG_TAG = DetailFragment.class.getSimpleName();
     static final String DETAIL_URI = "URI";
@@ -79,6 +87,18 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     private TextView mWindView;
     private TextView mPressureView;
 
+    // Variables for compass
+    // Define the display assembly compass picture
+    private ImageView mCompassView;
+    private ImageView mArrowView;
+    // Record the compass picture angle turned
+    private float mCurrentDegree = 0f;
+    private float mSensorDegree = 0f;
+    // Device sensor manager
+    private SensorManager mSensorManager;
+    private TextView mHeadingView;
+    private float mWindHeading;
+
     public DetailFragment() {
         setHasOptionsMenu(true);
     }
@@ -101,9 +121,22 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         mHumidityView = (TextView) rootView.findViewById(R.id.detail_humidity_textview);
         mWindView = (TextView) rootView.findViewById(R.id.detail_wind_textview);
         mPressureView = (TextView) rootView.findViewById(R.id.detail_pressure_textview);
-        return rootView;
-    }
 
+        // Set image to the image of the compass
+        mCompassView = (ImageView) rootView.findViewById(R.id.detail_compass_image);
+
+        // Set image to the image of the arrow
+        mArrowView = (ImageView) rootView.findViewById(R.id.detail_wind_arrow_image);
+
+        // TextView that will tell the user what degree he is heading
+        mHeadingView = (TextView) rootView.findViewById(R.id.detail_heading_textview);
+
+        // Initialize the device sensor
+        mSensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
+
+        return rootView;
+
+    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -212,6 +245,10 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             if (mShareActionProvider != null) {
                 mShareActionProvider.setShareIntent(createShareForecastIntent());
             }
+
+            // Set wind heading to instance variable for use in compass arrow
+            mWindHeading = windDirStr;
+
         }
     }
 
@@ -231,5 +268,83 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     public void onActivityCreated(Bundle savedInsatnceState) {
         getLoaderManager().initLoader(DETAIL_LOADER, null, this);
         super.onActivityCreated(savedInsatnceState);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // For the system's orientation sensor registered listeners
+        // TODO: use SensorManager.getOrientation() instead of depreciated constant
+        mSensorManager.registerListener(this,
+                mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION),
+                SensorManager.SENSOR_DELAY_GAME);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        // To stop the listener and save battery
+        mSensorManager.unregisterListener(this);
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        // get the angle around the z-axis rotated
+        mSensorDegree = Math.round(event.values[0]);
+
+        //mHeadingView.setText("Heading: " + Float.toString(degree) + " degrees");
+        mHeadingView.setText(Float.toString(mWindHeading));
+
+        // Create a rotation animation (revers turn degree degrees)
+        RotateAnimation ra = new RotateAnimation(
+                mCurrentDegree,
+                -mSensorDegree,
+                Animation.RELATIVE_TO_SELF,
+                0.5f,
+                Animation.RELATIVE_TO_SELF,
+                0.5f);
+
+        // How long the animation will take place
+        ra.setDuration(210);
+
+        // Set the animation after the end of the reservation status
+        ra.setFillAfter(true);
+
+        // Start the animation
+        mCompassView.startAnimation(ra);
+        mCurrentDegree = -mSensorDegree;
+
+        rotateWindArrow(mCurrentDegree + mWindHeading);
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        // not in use
+    }
+
+    /*
+        Rotate the wind arrow to the given heading
+     */
+    private void rotateWindArrow(float heading) {
+        // Create a rotation animation (revers turn degree degrees)
+        RotateAnimation ra = new RotateAnimation(
+                heading,
+                -mSensorDegree,
+                Animation.RELATIVE_TO_SELF,
+                0.5f,
+                Animation.RELATIVE_TO_SELF,
+                0.5f);
+
+        // How long the animation will take place
+        ra.setDuration(210);
+
+        // Set the animation after the end of the reservation status
+        ra.setFillAfter(true);
+
+        // Start the animation
+        mArrowView.startAnimation(ra);
+        mCurrentDegree = -mSensorDegree;
     }
 }
