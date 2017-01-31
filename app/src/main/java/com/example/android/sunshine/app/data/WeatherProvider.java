@@ -17,6 +17,7 @@ package com.example.android.sunshine.app.data;
 
 import android.annotation.TargetApi;
 import android.content.ContentProvider;
+import android.content.ContentProviderClient;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
