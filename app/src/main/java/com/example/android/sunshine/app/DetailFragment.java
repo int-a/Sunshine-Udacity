@@ -129,7 +129,7 @@ public class DetailFragment extends Fragment implements SensorEventListener, Loa
         mArrowView = (ImageView) rootView.findViewById(R.id.detail_wind_arrow_image);
 
         // TextView that will tell the user what degree he is heading
-        mHeadingView = (TextView) rootView.findViewById(R.id.detail_heading_textview);
+        //mHeadingView = (TextView) rootView.findViewById(R.id.detail_heading_textview);
 
         // Initialize the device sensor
         mSensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
@@ -247,7 +247,7 @@ public class DetailFragment extends Fragment implements SensorEventListener, Loa
             }
 
             // Set wind heading to instance variable for use in compass arrow
-            mWindHeading = windDirStr;
+            mWindHeading = windDirStr-90;
 
         }
     }
@@ -295,7 +295,7 @@ public class DetailFragment extends Fragment implements SensorEventListener, Loa
         mSensorDegree = Math.round(event.values[0]);
 
         //mHeadingView.setText("Heading: " + Float.toString(degree) + " degrees");
-        mHeadingView.setText(Float.toString(mWindHeading));
+        //mHeadingView.setText(Float.toString(mWindHeading));
 
         // Create a rotation animation (revers turn degree degrees)
         RotateAnimation ra = new RotateAnimation(
