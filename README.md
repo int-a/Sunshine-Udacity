@@ -11,6 +11,4 @@ For the original version, please go [here](https://github.com/udacity/Sunshine).
 
 A changelog for the course can be found [here](https://docs.google.com/a/knowlabs.com/document/d/193xJb_OpcNCqgquMhxPrMh05IEYFXQqt0S6-6YK8gBw/pub).
 
-<img src="/screenshots/main_screen.png" alt="App screenshot" width="350px;"/> 
-
-<img src="/screenshots/detail_screen.png" alt="App screenshot" width="350px;"/>
+<img src="/screenshots/main_screen.png" alt="App screenshot" width="350px;"/> <img src="/screenshots/detail_screen.png" alt="App screenshot" width="350px;"/>
